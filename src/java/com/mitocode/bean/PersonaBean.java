@@ -16,6 +16,16 @@ public class PersonaBean {
 
     private Persona persona = new Persona();
     private List<Persona> lstPersonas;
+    private String accion;
+
+    public String getAccion() {
+        return accion;
+    }
+
+    public void setAccion(String accion) {
+        this.limpiar();
+        this.accion = accion;
+    }
 
     public Persona getPersona() {
         return persona;
@@ -25,14 +35,46 @@ public class PersonaBean {
         this.persona = persona;
     }
     
-    public void registrar() throws Exception{
+    private void registrar() throws Exception{
         PersonaDAO dao;
         try{
             dao = new PersonaDAO();
             dao.registrar(persona);
+            this.listar();
         }catch (Exception e){
             throw e;
         }
+    }
+    
+    private void modificar() throws Exception{
+        PersonaDAO dao;
+        try{
+            dao = new PersonaDAO();
+            dao.modificar(persona);
+            this.listar();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+    
+    
+    public void operar() throws Exception{
+        switch(accion){
+            case "Registrar":
+                this.registrar();                
+                this.limpiar();
+                break;
+            case "Modificar":
+                this.modificar();
+                this.limpiar();
+                break;
+        }
+    }
+    
+    private void limpiar(){
+        this.persona.setCodigo(0);
+        this.persona.setNombre("");
+        this.persona.setSexo("");
     }
     
     public void listar() throws Exception{
@@ -61,18 +103,8 @@ public class PersonaBean {
             temp = dao.leerID(per);
             if(temp != null){
                 this.persona = temp;
+                this.accion = "Modificar";
             }
-        }catch (Exception e){
-            throw e;
-        }
-    }
-    
-    public void modificar() throws Exception{
-        PersonaDAO dao;
-        try{
-            dao = new PersonaDAO();
-            dao.modificar(persona);
-            this.listar();
         }catch (Exception e){
             throw e;
         }
@@ -88,4 +120,6 @@ public class PersonaBean {
             throw e;
         }
     }
+    
+    
 }
