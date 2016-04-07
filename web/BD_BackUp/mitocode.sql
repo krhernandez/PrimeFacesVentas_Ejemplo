@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-04-2016 a las 19:14:42
+-- Tiempo de generación: 07-04-2016 a las 20:36:00
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -32,6 +32,17 @@ CREATE TABLE `detalleventa` (
   `codProducto` int(11) UNSIGNED NOT NULL,
   `cantidad` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalleventa`
+--
+
+INSERT INTO `detalleventa` (`codigo`, `codVenta`, `codProducto`, `cantidad`) VALUES
+(5, 4, 1, 1),
+(6, 4, 2, 3),
+(7, 5, 2, 1),
+(8, 6, 1, 2),
+(9, 6, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -90,6 +101,15 @@ CREATE TABLE `venta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Volcado de datos para la tabla `venta`
+--
+
+INSERT INTO `venta` (`codigo`, `fecha`, `codPersona`, `monto`) VALUES
+(4, '2016-04-07 18:22:03', 1, 2367000),
+(5, '2016-04-07 18:30:49', 6, 289000),
+(6, '2016-04-07 18:34:34', 2, 3289000);
+
+--
 -- Índices para tablas volcadas
 --
 
@@ -128,7 +148,7 @@ ALTER TABLE `venta`
 -- AUTO_INCREMENT de la tabla `detalleventa`
 --
 ALTER TABLE `detalleventa`
-  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
@@ -143,7 +163,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
-  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Restricciones para tablas volcadas
 --
