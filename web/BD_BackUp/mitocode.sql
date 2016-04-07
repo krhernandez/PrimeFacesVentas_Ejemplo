@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-03-2016 a las 01:59:04
+-- Tiempo de generación: 07-04-2016 a las 19:14:42
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -85,7 +85,7 @@ INSERT INTO `producto` (`codigo`, `nombre`, `precio`) VALUES
 CREATE TABLE `venta` (
   `codigo` int(11) UNSIGNED NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `codPersona` tinyint(4) NOT NULL,
+  `codPersona` tinyint(4) UNSIGNED NOT NULL,
   `monto` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,7 +97,9 @@ CREATE TABLE `venta` (
 -- Indices de la tabla `detalleventa`
 --
 ALTER TABLE `detalleventa`
-  ADD PRIMARY KEY (`codigo`);
+  ADD PRIMARY KEY (`codigo`),
+  ADD KEY `codVenta` (`codVenta`),
+  ADD KEY `codProducto` (`codProducto`);
 
 --
 -- Indices de la tabla `persona`
@@ -115,7 +117,8 @@ ALTER TABLE `producto`
 -- Indices de la tabla `venta`
 --
 ALTER TABLE `venta`
-  ADD PRIMARY KEY (`codigo`);
+  ADD PRIMARY KEY (`codigo`),
+  ADD KEY `codPersona` (`codPersona`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -130,17 +133,34 @@ ALTER TABLE `detalleventa`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `codigo` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `codigo` tinyint(4) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
   MODIFY `codigo` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `detalleventa`
+--
+ALTER TABLE `detalleventa`
+  ADD CONSTRAINT `detalleventa_ibfk_1` FOREIGN KEY (`codVenta`) REFERENCES `venta` (`codigo`),
+  ADD CONSTRAINT `detalleventa_ibfk_2` FOREIGN KEY (`codProducto`) REFERENCES `producto` (`codigo`);
+
+--
+-- Filtros para la tabla `venta`
+--
+ALTER TABLE `venta`
+  ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`codPersona`) REFERENCES `persona` (`codigo`);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

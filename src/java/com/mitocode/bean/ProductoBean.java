@@ -5,6 +5,7 @@ import com.mitocode.model.Producto;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -34,34 +35,39 @@ public class ProductoBean {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
-    
-    private void registrar() throws Exception{
+
+    private void registrar() throws Exception {
         ProductoDAO dao;
-        try{
+        try {
             dao = new ProductoDAO();
             dao.registrar(producto);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    private void modificar() throws Exception{
+
+    private void modificar() throws Exception {
         ProductoDAO dao;
-        try{
+        try {
             dao = new ProductoDAO();
             dao.modificar(producto);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    
-    public void operar() throws Exception{
-        switch(accion){
+
+    private boolean isPostBack() {
+        boolean rpta;
+        rpta = FacesContext.getCurrentInstance().isPostback();
+        return rpta;
+    }
+
+    public void operar() throws Exception {
+        switch (accion) {
             case "Registrar":
-                this.registrar();                
+                this.registrar();
                 this.limpiar();
                 break;
             case "Modificar":
@@ -70,19 +76,26 @@ public class ProductoBean {
                 break;
         }
     }
-    
-    private void limpiar(){
+
+    private void limpiar() {
         this.producto.setCodigo(0);
         this.producto.setNombre("");
         this.producto.setPrecio(0);
     }
-    
-    public void listar() throws Exception{
+
+    public void listar(String valor) throws Exception {
         ProductoDAO dao;
-        try{
-            dao = new ProductoDAO();
-            lstProductos = dao.listar();
-        }catch (Exception e){
+        try {
+            if (valor.equals("F")) {
+                if (isPostBack() == false) {
+                    dao = new ProductoDAO();
+                    lstProductos = dao.listar();
+                }
+            } else {
+                dao = new ProductoDAO();
+                lstProductos = dao.listar();
+            }
+        } catch (Exception e) {
             throw e;
         }
     }
@@ -94,32 +107,31 @@ public class ProductoBean {
     public void setLstProductos(List<Producto> lstProductos) {
         this.lstProductos = lstProductos;
     }
-    
-    public void leerID(Producto per) throws Exception{
+
+    public void leerID(Producto per) throws Exception {
         ProductoDAO dao;
         Producto temp;
-        try{
+        try {
             dao = new ProductoDAO();
             temp = dao.leerID(per);
-            if(temp != null){
+            if (temp != null) {
                 this.producto = temp;
                 this.accion = "Modificar";
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    public void eliminar(Producto per) throws Exception{
+
+    public void eliminar(Producto per) throws Exception {
         ProductoDAO dao;
-        try{
+        try {
             dao = new ProductoDAO();
             dao.eliminar(per);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    
+
 }
