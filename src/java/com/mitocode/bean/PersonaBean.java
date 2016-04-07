@@ -5,6 +5,8 @@ import com.mitocode.model.Persona;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.FacesComponent;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -34,34 +36,39 @@ public class PersonaBean {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
-    
-    private void registrar() throws Exception{
+
+    private void registrar() throws Exception {
         PersonaDAO dao;
-        try{
+        try {
             dao = new PersonaDAO();
             dao.registrar(persona);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    private void modificar() throws Exception{
+
+    private void modificar() throws Exception {
         PersonaDAO dao;
-        try{
+        try {
             dao = new PersonaDAO();
             dao.modificar(persona);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    
-    public void operar() throws Exception{
-        switch(accion){
+
+    private boolean isPostBack() {
+        boolean rpta;
+        rpta = FacesContext.getCurrentInstance().isPostback();
+        return rpta;
+    }
+
+    public void operar() throws Exception {
+        switch (accion) {
             case "Registrar":
-                this.registrar();                
+                this.registrar();
                 this.limpiar();
                 break;
             case "Modificar":
@@ -70,19 +77,26 @@ public class PersonaBean {
                 break;
         }
     }
-    
-    private void limpiar(){
+
+    private void limpiar() {
         this.persona.setCodigo(0);
         this.persona.setNombre("");
         this.persona.setSexo("");
     }
-    
-    public void listar() throws Exception{
+
+    public void listar(String valor) throws Exception {
         PersonaDAO dao;
-        try{
-            dao = new PersonaDAO();
-            lstPersonas = dao.listar();
-        }catch (Exception e){
+        try {
+            if (valor.equals("F")) {
+                if (isPostBack() == false) {
+                    dao = new PersonaDAO();
+                    lstPersonas = dao.listar();
+                }
+            } else {
+                dao = new PersonaDAO();
+                lstPersonas = dao.listar();
+            }
+        } catch (Exception e) {
             throw e;
         }
     }
@@ -94,32 +108,31 @@ public class PersonaBean {
     public void setLstPersonas(List<Persona> lstPersonas) {
         this.lstPersonas = lstPersonas;
     }
-    
-    public void leerID(Persona per) throws Exception{
+
+    public void leerID(Persona per) throws Exception {
         PersonaDAO dao;
         Persona temp;
-        try{
+        try {
             dao = new PersonaDAO();
             temp = dao.leerID(per);
-            if(temp != null){
+            if (temp != null) {
                 this.persona = temp;
                 this.accion = "Modificar";
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    public void eliminar(Persona per) throws Exception{
+
+    public void eliminar(Persona per) throws Exception {
         PersonaDAO dao;
-        try{
+        try {
             dao = new PersonaDAO();
             dao.eliminar(per);
-            this.listar();
-        }catch (Exception e){
+            this.listar("V");
+        } catch (Exception e) {
             throw e;
         }
     }
-    
-    
+
 }
